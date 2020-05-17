@@ -1,6 +1,7 @@
 package ru.keni0k.game.tanks.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,6 @@ public class BulletService implements BaseService<Bullet> {
 
     @Override
     public Bullet add(Bullet model) {
-        model.setDType("Bullet");  // TODO: autoSet
         return repository.saveAndFlush(model);
     }
 
@@ -76,55 +76,51 @@ public class BulletService implements BaseService<Bullet> {
 
     @Component
     public class ScheduledTasks {
-        private void update(Bullet bullet) {
-            EntityInTheWorld entity = entityInTheWorldService.getByTargetEntity(bullet);
-            entity.goStraight();
-            World world = bullet.getWorld();
-            if (world.isEntityOutOfTheField(entity)) {
-                System.out.println("OUT! Entity = " + entity.getId());
-                world.removeEntity(entity);
-                worldService.update(world);
-                delete(bullet);
-            } else {
-                EntityInTheWorld otherEntity = world.checkBulletCollide(entity);
-                if (otherEntity != null) {
-                    switch (otherEntity.getTargetEntity().getDType()) {
-                        case "Tank":
-                            Tank tank = (Tank) otherEntity.getTargetEntity();
-                            tank.decLives();
-                            if (!tank.isAlive()) {
-                                world.removeEntity(otherEntity);
-                                worldService.update(world);
-                                tankService.delete(tank);
-                            }
-                            break;
-                        case "Brick":
-                            Brick brick = (Brick) otherEntity.getTargetEntity();
-                            if (!brick.isHard()) {
-                                world.removeEntity(otherEntity);
-                                worldService.update(world);
-                                brickService.delete(brick);
-                            }
-                            break;
-                        case "Bullet":
-                            Bullet otherBullet = (Bullet) otherEntity.getTargetEntity();
-                            world.removeEntity(otherEntity);
-                            worldService.update(world);
-                            delete(otherBullet);
-                            break;
-                    }
-                } else {
-                    entityInTheWorldService.update(entity);
-                }
-            }
-        }
-
         @Scheduled(fixedRate = 50)
         public void reportCurrentTime() {
             List<Bullet> bullets = findAll();
-            if (bullets != null)
-                bullets.forEach(this::update);
+            List<EntityInTheWorld> toRemove = new ArrayList<>();
+            if (bullets != null) {
+                for (Bullet bullet : bullets) {
+                    EntityInTheWorld entity = entityInTheWorldService.getByTargetEntity(bullet);
+                    World world = bullet.getWorld();
+                    List<EntityInTheWorld> otherEntities = world.checkBulletCollide(entity);
+                    if (world.isEntityOutOfTheField(entity)) {
+                        toRemove.add(entity);
+                    } else if (otherEntities.size() > 0) {
+                        for (EntityInTheWorld otherEntity : otherEntities) {
+                            switch (otherEntity.getTargetEntity().getDType()) {
+                                case "Tank":
+                                    Tank tank = (Tank) otherEntity.getTargetEntity();
+                                    tank.decLives();
+                                    tankService.update(tank);
+                                    if (!tank.isAlive()) {
+                                        tankService.delete(tank);
+                                    }
+                                    break;
+                                case "Brick":
+                                    Brick brick = (Brick) otherEntity.getTargetEntity();
+                                    if (!brick.isHard()) {
+                                        brickService.delete(brick);
+                                    }
+                                    break;
+                                case "Bullet":
+                                    toRemove.add(otherEntity);
+                                    break;
+                            }
+                        }
+                        toRemove.add(entity);
+                    } else {
+                        entity.goStraight();
+                        entityInTheWorldService.update(entity);
+                    }
+                }
+                for (EntityInTheWorld entity: toRemove){
+                    try {
+                        delete((Bullet) entity.getTargetEntity());
+                    } catch (JpaObjectRetrievalFailureException ignore){}
+                }
+            }
         }
     }
-
 }

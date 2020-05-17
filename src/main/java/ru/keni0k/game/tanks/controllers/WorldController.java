@@ -19,7 +19,7 @@ public class WorldController {
     }
 
     @GetMapping(PATH.INIT)
-    ResponseEntity<?> getInitialWorld(@RequestParam Long worldId){
+    public ResponseEntity<?> getInitialWorld(@RequestParam Long worldId){
         if (worldId == -1) {
             return service.initWorld();
         } else {
@@ -28,7 +28,7 @@ public class WorldController {
     }
 
     @GetMapping
-    ResponseEntity<?> getWorldMap(@RequestParam Long worldId){
+    public ResponseEntity<?> getWorldMap(@RequestParam Long worldId){
         return service.getWorldMap(worldId);
     }
 

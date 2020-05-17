@@ -21,7 +21,7 @@ public class TankController {
     }
 
     @PostMapping(KEY)
-    ResponseEntity<?> keyPressed(@RequestBody KeyAction keyAction) {
+    public ResponseEntity<?> keyPressed(@RequestBody KeyAction keyAction) {
         return service.keyPressed(keyAction);
     }
 

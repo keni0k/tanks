@@ -27,9 +27,9 @@ function startGame(worldId) {
         tankId = response['tankId'];
         map = response['map'];
         drawMap();
-        setInterval(() => mapRequest(worldId, map), 100);
+        setInterval(() => mapRequest(worldId), 100);
         document.onkeypress = function (e) {
-            keyRequest(KEY_EVENT, worldId, tankId, e.key, map)
+            keyRequest(worldId, tankId, e.key)
         };
     });
 

@@ -20,13 +20,13 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    String getUI(ModelMap modelMap){
+    public String getUI(ModelMap modelMap){
         modelMap.addAttribute("worlds", worldService.findAll());
         return "index";
     }
 
     @GetMapping(PATH.CLEAR_ALL)
-    RedirectView clearAll(ModelMap modelMap){
+    public RedirectView clearAll(ModelMap modelMap){
         worldService.deleteAll();
         return new RedirectView("/");
     }

@@ -105,7 +105,10 @@ public class WorldService implements BaseService<World> {
 
     public ResponseEntity<?> getWorldMap(Long worldId){
         World world = getById(worldId);
-        return new ResponseEntity<>(world.getMap(), HttpStatus.OK);
+        if (world != null)
+            return new ResponseEntity<>(world.getMap(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

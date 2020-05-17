@@ -36,7 +36,7 @@ public class World {
     private List<EntityInTheWorld> entityList;
 
     public static MapItem[][] getInitialWorld26x26(long tankId, int tankDuration) {
-        long[][] map =  new long[][]{
+        long[][] map = new long[][]{
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0},
@@ -65,8 +65,8 @@ public class World {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
         MapItem[][] mapp = new MapItem[26][26];
-        for (int i = 0; i < 26; i++){
-            for (int j = 0; j < 26; j++){
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
                 if (map[i][j] < 5)
                     mapp[i][j] = new MapItem(map[i][j]);
                 else
@@ -76,16 +76,18 @@ public class World {
         return mapp;
     }
 
-    public MapItem[][] getMap(){
+    public MapItem[][] getMap() {
         MapItem[][] map = new MapItem[height][width];
-        for (int i = 0; i < height; i++){
-            for(int j = 0; j<width; j++){
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 map[i][j] = new MapItem(0);
             }
         }
-        for (EntityInTheWorld entity: entityList){
-            map[entity.getY()][entity.getX()].setE(entity.getNumberToView());
-            map[entity.getY()][entity.getX()].setD(EntityInTheWorld.getDuration(entity.getDuration()));
+        for (EntityInTheWorld entity : entityList) {
+            if (entity.getY() >= 0 && entity.getX() >= 0) {
+                map[entity.getY()][entity.getX()].setE(entity.getNumberToView());
+                map[entity.getY()][entity.getX()].setD(EntityInTheWorld.getDuration(entity.getDuration()));
+            }
         }
         return map;
     }
@@ -129,16 +131,26 @@ public class World {
         return true;
     }
 
-    public EntityInTheWorld checkBulletCollide(EntityInTheWorld entity) {
+    public List<EntityInTheWorld> checkBulletCollide(EntityInTheWorld entity) {
+        Bullet bullet = (Bullet) entity.getTargetEntity();
+        List<EntityInTheWorld> entities = new ArrayList<>();
         for (EntityInTheWorld otherEntity : entityList) {
-            if (otherEntity.getX() == entity.getX() && otherEntity.getY() == entity.getY()) {
-                return otherEntity;
+            float deltaX = entity.getX() - otherEntity.getX();
+            float deltaY = entity.getY() - otherEntity.getY();
+            if ((abs(deltaX) < 1 && abs(deltaY) < 1) ||
+                    (abs(deltaX + 1) < 1 && abs(deltaY) < 1) ||
+                    (abs(deltaX + 1) < 1 && abs(deltaY + 1) < 1) ||
+                    (abs(deltaX) < 1 && abs(deltaY + 1) < 1)) {
+                if (otherEntity.getTargetEntity().getId() != bullet.getTankId() &&
+                        !otherEntity.getTargetEntity().getId().equals(bullet.getId())) {
+                    entities.add(otherEntity);
+                }
             }
         }
-        return null;
+        return entities;
     }
 
-    public boolean isEntityOutOfTheField(EntityInTheWorld entity){
+    public boolean isEntityOutOfTheField(EntityInTheWorld entity) {
         return entity.getX() < 0 || entity.getY() < 0 || entity.getX() > 24 || entity.getY() > 24;
     }
 
