@@ -13,7 +13,7 @@ import java.io.IOException;
 class SimpleCORSFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        var resp = (HttpServletResponse) response;
+        HttpServletResponse resp = (HttpServletResponse) response;
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE");
         resp.setHeader("Access-Control-Max-Age", "3600");
