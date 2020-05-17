@@ -8,7 +8,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MapAndIds {
-    MapItem[][] map;
-    long worldId;
-    long tankId;
+
+    private MapItem[][] map;
+    private long worldId;
+    private long tankId;
+
 }

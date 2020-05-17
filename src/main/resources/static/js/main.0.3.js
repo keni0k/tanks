@@ -6,7 +6,6 @@ TANK_SPRITE_IMG.src = 'img/tank_sprite.png';
 const BASE_URL = '/api';
 const TANKS_URL  = BASE_URL + '/tanks';
 const KEY_EVENT = TANKS_URL + '/key';
-const TANK2WAIT = TANKS_URL + '/get2tank';
 const WORLD_URL = BASE_URL + "/world";
 const INIT_WORLD = WORLD_URL + '/init';
 let canvas;

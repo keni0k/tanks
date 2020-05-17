@@ -12,6 +12,7 @@ import java.util.List;
 public class EntityInTheWorldService implements BaseService<EntityInTheWorld> {
 
     private EntityInTheWorldRepository repository;
+
     @Autowired
     public EntityInTheWorldService(EntityInTheWorldRepository entityInTheWorldRepository){
         repository = entityInTheWorldRepository;
@@ -44,11 +45,6 @@ public class EntityInTheWorldService implements BaseService<EntityInTheWorld> {
     @Override
     public void delete(EntityInTheWorld model) {
         repository.delete(model);
-    }
-
-    @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
     }
 
     @Override

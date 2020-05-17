@@ -6,6 +6,6 @@ import ru.keni0k.game.tanks.models.GameEntity;
 
 public interface EntityInTheWorldRepository extends JpaRepository<EntityInTheWorld, Long> {
 
-    public EntityInTheWorld getByTargetEntity(GameEntity entity);
+    EntityInTheWorld getByTargetEntity(GameEntity entity);
 
 }

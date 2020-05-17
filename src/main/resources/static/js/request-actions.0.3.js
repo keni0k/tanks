@@ -1,9 +1,5 @@
 function keyRequest(worldId, tankId, keyAction) {
     const request = ajax().post(KEY_EVENT, {key: keyAction, worldId: worldId, tankId: tankId});
-    request.then(function (response) {
-        const consoleInfoElement = document.getElementById("consoleInfo");
-        consoleInfoElement.innerText = response['key'];
-    });
 }
 
 function mapRequest(worldId) {

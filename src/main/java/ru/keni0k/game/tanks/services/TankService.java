@@ -40,7 +40,6 @@ public class TankService implements BaseService<Tank> {
 
     @Override
     public Tank add(Tank model) {
-//        model.setDType("Tank");  // TODO: autoSet
         return repository.saveAndFlush(model);
     }
 
@@ -52,11 +51,6 @@ public class TankService implements BaseService<Tank> {
     @Override
     public void delete(Tank model) {
         repository.delete(model);
-    }
-
-    @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
     }
 
     private void addBullet(World world, KeyAction keyAction) {
@@ -95,7 +89,6 @@ public class TankService implements BaseService<Tank> {
         boolean mayChangeCoords = world.checkTankCollideAndChangeCoords(entityInTheWorld);
         if (!mayChangeCoords) {
             entityInTheWorld.setCoordsReverseDuration(dur);
-            keyAction.setKey('-');
         }
         update(tank);
         entityInTheWorldService.update(entityInTheWorld);

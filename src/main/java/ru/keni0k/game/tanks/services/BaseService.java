@@ -13,7 +13,5 @@ public interface BaseService<T> {
 
     void delete(T model);
 
-    void delete(Long id);
-
     void deleteAll();
 }

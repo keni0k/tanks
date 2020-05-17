@@ -7,8 +7,9 @@ import ru.keni0k.game.tanks.models.EntityInTheWorld;
 @Getter
 @Setter
 public class MapItem {
-    long e;
-    int d;
+
+    private long e;
+    private int d;
 
     public MapItem(long entity) {
         this.e = entity;
@@ -19,4 +20,5 @@ public class MapItem {
         this.e = entity;
         this.d = duration;
     }
+
 }

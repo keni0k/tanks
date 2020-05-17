@@ -43,15 +43,7 @@ public class BrickService implements BaseService<Brick> {
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
     public void deleteAll() {
-        List<Brick> bricks = findAll();
-        for (Brick brick : bricks) {
-            delete(brick);
-        }
+        repository.deleteAll();
     }
 }

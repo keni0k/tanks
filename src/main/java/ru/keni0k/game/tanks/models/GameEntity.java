@@ -9,9 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@DiscriminatorColumn(
-        name = "dType",
-        discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "dType", discriminatorType = DiscriminatorType.STRING)
 public abstract class GameEntity {
 
     public GameEntity(World world) {

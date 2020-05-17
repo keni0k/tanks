@@ -54,11 +54,6 @@ public class WorldService implements BaseService<World> {
         repository.delete(model);
     }
 
-    @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-
     public ResponseEntity<?> initWorld() {
         World world = new World();
         world = add(world);

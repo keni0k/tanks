@@ -136,14 +136,13 @@ public class EntityInTheWorld {
                 return 3;
             case RIGHT:
                 return 4;
-            case NONE:
+            default:
                 return 5;
         }
-        throw new IllegalArgumentException("Duration must be in {1, 2, 3, 4, 5}");
     }
 
     public long getNumberToView() {
-        if (getTargetEntity() != null && getTargetEntity().getDType() != null)
+        if (getTargetEntity() != null && getTargetEntity().getDType() != null) {
             switch (getTargetEntity().getDType()) {
                 case "Brick":
                     Brick brick = (Brick) getTargetEntity();
@@ -153,6 +152,7 @@ public class EntityInTheWorld {
                 default:
                     return getTargetEntity().getId() + 3;
             }
+        }
         return -1;
     }
 
@@ -160,6 +160,5 @@ public class EntityInTheWorld {
         this.duration = duration;
     }
 
-    public EntityInTheWorld() {
-    }
+    public EntityInTheWorld() { }
 }

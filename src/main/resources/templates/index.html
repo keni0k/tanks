@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Tanks Game</title>
 </head>
-<body>
-<ul>
-    <!--/*@thymesVar id="worlds" type="java.util.List<ru.keni0k.game.tanks.models.World>"*/-->
-    <li th:each="world: ${worlds}">
-        <a href="#" th:onclick="'startGame(' + ${world.getId()} + ')'" th:text="${'ID: ' + world.getId()}"></a>
-    </li>
-    <li><a href="#" onclick="startGame(-1)">Создать новый</a></li>
-    <li><a href="/api/world/clear_all">Удалить все миры</a></li>
-</ul>
 
-<canvas id="field">Обновите браузер</canvas>
-<p id="consoleInfo"></p>
-<p id="consoleError"></p>
-<noscript>Обновите браузер</noscript>
+<body>
+
+    <ul>
+        <li th:each="world: ${worlds}">
+            <a href="#" th:onclick="'startGame(' + ${world.getId()} + ')'" th:text="${'ID: ' + world.getId()}"></a>
+        </li>
+        <li><a href="#" onclick="startGame(-1)">Создать новый</a></li>
+        <li><a href="/api/world/clear_all">Удалить все миры</a></li>
+    </ul>
+
+    <canvas id="field">Обновите браузер</canvas>
+    <noscript>Обновите браузер</noscript>
+
+    <script src="https://cdn.rawgit.com/fdaciuk/ajax/v3.0.4/dist/ajax.min.js"></script>
+    <script src="js/request-actions.0.3.js"></script>
+    <script src="js/drawing.0.3.js"></script>
+    <script src="js/main.0.3.js"></script>
+
 </body>
-<script src="https://cdn.rawgit.com/fdaciuk/ajax/v3.0.4/dist/ajax.min.js"></script>
-<script src="js/request-actions.0.3.js"></script>
-<script src="js/drawing.0.3.js"></script>
-<script src="js/main.0.3.js"></script>
+
 </html>

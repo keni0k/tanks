@@ -18,14 +18,12 @@ public class BulletService implements BaseService<Bullet> {
     private EntityInTheWorldService entityInTheWorldService;
     private TankService tankService;
     private BrickService brickService;
-    private WorldService worldService;
 
     @Autowired
     public BulletService(BulletRepository bulletRepository, EntityInTheWorldService entityInTheWorldService,
-                         WorldService worldService, TankService tankService, BrickService brickService) {
+                         TankService tankService, BrickService brickService) {
         repository = bulletRepository;
         this.entityInTheWorldService = entityInTheWorldService;
-        this.worldService = worldService;
         this.tankService = tankService;
         this.brickService = brickService;
     }
@@ -62,11 +60,6 @@ public class BulletService implements BaseService<Bullet> {
     @Override
     public void delete(Bullet model) {
         repository.delete(model);
-    }
-
-    @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
     }
 
     @Override

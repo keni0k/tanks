@@ -6,7 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class KeyAction {
-    char key;
-    long worldId;
-    long tankId;
+
+    private char key;
+    private long worldId;
+    private long tankId;
+
 }
