@@ -122,7 +122,8 @@ public class BulletService implements BaseService<Bullet> {
         @Scheduled(fixedRate = 50)
         public void reportCurrentTime() {
             List<Bullet> bullets = findAll();
-            bullets.forEach(this::update);
+            if (bullets != null)
+                bullets.forEach(this::update);
         }
     }
 

@@ -10,9 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class DispatcherConfig implements WebMvcConfigurer {
 
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-            "classpath:/META-INF/resources/", "classpath:/resources/",
-            "/static/", "static/", "classpath:/static/",
-            "classpath:/public/", "classpath:/templates/"};
+            "/static/", "static/", "classpath:/static/", "classpath:/templates/"};
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
