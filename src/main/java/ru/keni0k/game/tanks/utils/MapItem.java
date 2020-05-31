@@ -13,7 +13,7 @@ public class MapItem {
 
     public MapItem(long entity) {
         this.e = entity;
-        this.d = EntityInTheWorld.getDuration(EntityInTheWorld.Duration.NONE);
+        this.d = EntityInTheWorld.getDirection(EntityInTheWorld.Direction.NONE);
     }
 
     public MapItem(long entity, int duration) {

@@ -11,8 +11,8 @@ public abstract class MovableGameEntity extends GameEntity {
     protected int speed;
     protected int damage;
 
-    public MovableGameEntity(World world, int damage, int speed) {
-        super(world);
+    public MovableGameEntity(EntityInTheWorld entityInTheWorld, int damage, int speed) {
+        super(entityInTheWorld);
         this.damage = damage;
         this.speed = speed;
     }

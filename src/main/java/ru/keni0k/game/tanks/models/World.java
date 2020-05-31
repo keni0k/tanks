@@ -1,9 +1,11 @@
 package ru.keni0k.game.tanks.models;
 
 import lombok.Getter;
+import org.hibernate.annotations.Proxy;
 import ru.keni0k.game.tanks.utils.MapItem;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +13,10 @@ import static java.lang.Math.abs;
 
 @Getter
 @Entity
+@Proxy(lazy = false)
 public class World {
 
     private int width, height;
-    private String name;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,7 @@ public class World {
         entityList = new ArrayList<>();
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER)//cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EntityInTheWorld> entityList;
 
     public static MapItem[][] getInitialWorld26x26(long tankId, int tankDuration) {
@@ -86,7 +88,7 @@ public class World {
         for (EntityInTheWorld entity : entityList) {
             if (entity.getY() >= 0 && entity.getX() >= 0) {
                 map[entity.getY()][entity.getX()].setE(entity.getNumberToView());
-                map[entity.getY()][entity.getX()].setD(EntityInTheWorld.getDuration(entity.getDuration()));
+                map[entity.getY()][entity.getX()].setD(EntityInTheWorld.getDirection(entity.getDirection()));
             }
         }
         return map;
@@ -110,7 +112,7 @@ public class World {
         for (EntityInTheWorld otherEntity : entityList) {
             if (otherEntity.getTargetEntity().getDType().equals("Brick") ||
                     otherEntity.getTargetEntity().getDType().equals("Tank")) {
-                if (otherEntity.equals(entity)) {
+                if (otherEntity.getId().equals(entity.getId())) {
                     continue;
                 }
                 float deltaX = entity.getX() - otherEntity.getX();

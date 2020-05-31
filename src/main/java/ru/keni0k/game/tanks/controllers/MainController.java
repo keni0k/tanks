@@ -26,7 +26,7 @@ public class MainController {
     }
 
     @GetMapping(PATH.CLEAR_ALL)
-    public RedirectView clearAll(ModelMap modelMap){
+    public RedirectView clearAll(){
         worldService.deleteAll();
         return new RedirectView("/");
     }

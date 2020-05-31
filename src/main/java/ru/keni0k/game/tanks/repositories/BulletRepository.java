@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface BulletRepository extends JpaRepository<Bullet, Long> {
 
-    List<Bullet> getBulletsByWorldId(Long worldId);
-
 }

@@ -13,8 +13,8 @@ import javax.persistence.InheritanceType;
 @DiscriminatorValue("Tank")
 public class Tank extends MovableGameEntity {
 
-    public Tank(World world, int lives, int damage, int speed) {
-        super(world, damage, speed);
+    public Tank(EntityInTheWorld entityInTheWorld, int lives, int damage, int speed) {
+        super(entityInTheWorld, damage, speed);
         setLives(lives);
     }
 

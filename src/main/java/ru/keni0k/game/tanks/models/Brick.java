@@ -10,8 +10,8 @@ import javax.persistence.InheritanceType;
 @DiscriminatorValue("Brick")
 public class Brick extends GameEntity {
 
-    public Brick(World world, int lives) {
-        super(world);
+    public Brick(EntityInTheWorld entityInTheWorld, int lives) {
+        super(entityInTheWorld);
         setLives(lives);
     }
 

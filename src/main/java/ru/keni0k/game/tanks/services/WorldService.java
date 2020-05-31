@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.keni0k.game.tanks.models.*;
+import ru.keni0k.game.tanks.repositories.BulletRepository;
 import ru.keni0k.game.tanks.repositories.TankRepository;
 import ru.keni0k.game.tanks.repositories.WorldRepository;
 import ru.keni0k.game.tanks.utils.MapAndIds;
@@ -18,14 +19,16 @@ public class WorldService implements BaseService<World> {
     private WorldRepository repository;
     private TankRepository tankRepository;
     private BrickService brickService;
+    private BulletRepository bulletRepository;
     private EntityInTheWorldService entityInTheWorldService;
 
     @Autowired
     public WorldService(WorldRepository worldRepository, TankRepository tankRepository, BrickService brickService,
-                        EntityInTheWorldService entityInTheWorldService) {
+                        EntityInTheWorldService entityInTheWorldService, BulletRepository bulletRepository) {
         repository = worldRepository;
         this.tankRepository = tankRepository;
         this.brickService = brickService;
+        this.bulletRepository = bulletRepository;
         this.entityInTheWorldService = entityInTheWorldService;
     }
 
@@ -54,56 +57,57 @@ public class WorldService implements BaseService<World> {
         repository.delete(model);
     }
 
-    public ResponseEntity<?> initWorld() {
+    public MapAndIds initWorld() {
         World world = new World();
         world = add(world);
-
-        Tank tank = new Tank(world, 3, 1, 1);
-        tank = tankRepository.saveAndFlush(tank);
-        EntityInTheWorld entity = new EntityInTheWorld(tank, 8, 24, EntityInTheWorld.Duration.UP, world);
+        System.out.println("Initialization of world " + world.getId() + " has started!");
+        EntityInTheWorld entity = new EntityInTheWorld(8, 24, EntityInTheWorld.Direction.UP, world);
         entity = entityInTheWorldService.add(entity);
         world.addGameEntity(entity);
-
-        MapItem[][] worldInitialState = World.getInitialWorld26x26(tank.getId(), EntityInTheWorld.getDuration(entity.getDuration()));
+        Tank tank = new Tank(entity, 3, 1, 1);
+        tank = tankRepository.saveAndFlush(tank);
+        tank.setTargetEntityInTheWorld(entity);
+        entity.setTargetEntity(tank);
+        entityInTheWorldService.update(entity);
+        MapItem[][] worldInitialState = World.getInitialWorld26x26(tank.getId(), EntityInTheWorld.getDirection(entity.getDirection()));
         for (int i = 0; i < worldInitialState.length; i++) {
             for (int j = 0; j < worldInitialState[0].length; j++) {
                 long value = worldInitialState[j][i].getE();
-                if (value == 1) {
-                    Brick brick = new Brick(world, 1);
+                if (value == 1 || value == 2) {
+                    entity = new EntityInTheWorld(i, j, EntityInTheWorld.Direction.NONE, world);
+                    entity = entityInTheWorldService.add(entity);
+                    world.addGameEntity(entity);
+                    Brick brick = new Brick(entity, value == 1 ? 1 : -1);
                     brick = brickService.add(brick);
-                    entity = new EntityInTheWorld(brick, i, j, EntityInTheWorld.Duration.NONE, world);
-                    entity = entityInTheWorldService.add(entity);
-                    world.addGameEntity(entity);
-                } else if (value == 2) {
-                    Brick hardBrick = new Brick(world, -1);
-                    hardBrick = brickService.add(hardBrick);
-                    entity = new EntityInTheWorld(hardBrick, i, j, EntityInTheWorld.Duration.NONE, world);
-                    entity = entityInTheWorldService.add(entity);
-                    world.addGameEntity(entity);
+                    entity.setTargetEntity(brick);
+                    entityInTheWorldService.update(entity);
                 }
             }
         }
         update(world);
-        return new ResponseEntity<>(new MapAndIds(worldInitialState, world.getId(), tank.getId()), HttpStatus.OK);
+        System.out.println("Init of world " + world.getId() + " has finished!");
+        return new MapAndIds(worldInitialState, world.getId(), tank.getId());
     }
 
-    public ResponseEntity<?> addNewTank(Long worldId){
+    public MapAndIds addNewTank(Long worldId){
         World world = getById(worldId);
-        Tank tank = new Tank(world, 3, 1, 1);
-        tank = tankRepository.saveAndFlush(tank);
-        EntityInTheWorld entityInTheWorld = new EntityInTheWorld(tank, 0, 0, EntityInTheWorld.Duration.RIGHT, world);
+        EntityInTheWorld entityInTheWorld = new EntityInTheWorld( 0, 0, EntityInTheWorld.Direction.RIGHT, world);
         entityInTheWorld = entityInTheWorldService.add(entityInTheWorld);
         world.addGameEntity(entityInTheWorld);
         update(world);
-        return new ResponseEntity<>(new MapAndIds(world.getMap(), worldId, tank.getId()), HttpStatus.OK);
+        Tank tank = new Tank(entityInTheWorld, 3, 1, 1);
+        tank = tankRepository.saveAndFlush(tank);
+        entityInTheWorld.setTargetEntity(tank);
+        entityInTheWorldService.update(entityInTheWorld);
+        return new MapAndIds(world.getMap(), worldId, tank.getId());
     }
 
-    public ResponseEntity<?> getWorldMap(Long worldId){
+    public MapItem[][] getWorldMap(Long worldId){
         World world = getById(worldId);
         if (world != null)
-            return new ResponseEntity<>(world.getMap(), HttpStatus.OK);
+            return world.getMap();
         else
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new NullPointerException();
     }
 
     @Override
@@ -113,9 +117,10 @@ public class WorldService implements BaseService<World> {
             world.clearGameEntityList();
             update(world);
         }
-        entityInTheWorldService.deleteAll();
         tankRepository.deleteAll();
         brickService.deleteAll();
+        bulletRepository.deleteAll();
+        entityInTheWorldService.deleteAll();
         repository.deleteAll();
     }
 

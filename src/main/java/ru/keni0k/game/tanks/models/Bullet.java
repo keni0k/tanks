@@ -15,8 +15,8 @@ public class Bullet extends MovableGameEntity {
 
     private long tankId;
 
-    public Bullet(World world, int damage, int speed, long tankId) {
-        super(world, damage, speed);
+    public Bullet(EntityInTheWorld entityInTheWorld, int damage, int speed, long tankId) {
+        super(entityInTheWorld, damage, speed);
         this.tankId = tankId;
         this.setLives(1);
     }

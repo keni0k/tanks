@@ -3,39 +3,38 @@ package ru.keni0k.game.tanks.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
-import static ru.keni0k.game.tanks.models.EntityInTheWorld.Duration.*;
+import static ru.keni0k.game.tanks.models.EntityInTheWorld.Direction.*;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "entity_in_the_world")
 public class EntityInTheWorld {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     private GameEntity targetEntity;
+
     private int x, y;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private World world;
 
-    public enum Duration {RIGHT, LEFT, UP, DOWN, NONE}
+    public enum Direction {RIGHT, LEFT, UP, DOWN, NONE}
 
-    private Duration duration;
+    private Direction direction;
 
-    public EntityInTheWorld(GameEntity entity, int x, int y, Duration duration, World world) {
-        targetEntity = entity;
+    public EntityInTheWorld(int x, int y, Direction direction, World world) {
         this.x = x;
         this.y = y;
-        this.duration = duration;
+        this.direction = direction;
         this.world = world;
     }
 
@@ -74,27 +73,27 @@ public class EntityInTheWorld {
     }
 
     public void goUp() {
-        setDuration(UP);
+        setDirection(UP);
         setY(getY() - 1);
     }
 
     public void goDown() {
-        setDuration(DOWN);
+        setDirection(DOWN);
         setY(getY() + 1);
     }
 
     public void goRight() {
-        setDuration(RIGHT);
+        setDirection(RIGHT);
         setX(getX() + 1);
     }
 
     public void goLeft() {
-        setDuration(LEFT);
+        setDirection(LEFT);
         setX(getX() - 1);
     }
 
     public void goStraight() {
-        switch (duration) {
+        switch (direction) {
             case RIGHT:
                 goRight();
                 break;
@@ -110,24 +109,8 @@ public class EntityInTheWorld {
         }
     }
 
-    public static Duration getDuration(int duration) {
-        switch (duration) {
-            case 1:
-                return UP;
-            case 2:
-                return LEFT;
-            case 3:
-                return DOWN;
-            case 4:
-                return RIGHT;
-            case 5:
-                return NONE;
-        }
-        throw new IllegalArgumentException("Duration must be in {1, 2, 3, 4, 5}");
-    }
-
-    public static int getDuration(Duration duration) {
-        switch (duration) {
+    public static int getDirection(Direction direction) {
+        switch (direction) {
             case UP:
                 return 1;
             case LEFT:
@@ -156,8 +139,8 @@ public class EntityInTheWorld {
         return -1;
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public EntityInTheWorld() { }

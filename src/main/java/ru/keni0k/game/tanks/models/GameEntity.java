@@ -1,6 +1,5 @@
 package ru.keni0k.game.tanks.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +11,9 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "dType", discriminatorType = DiscriminatorType.STRING)
 public abstract class GameEntity {
 
-    public GameEntity(World world) {
+    public GameEntity(EntityInTheWorld entityInTheWorld) {
+        targetEntityInTheWorld = entityInTheWorld;
         this.lives = -1;
-        this.world = world;
     }
 
     public GameEntity() {
@@ -29,16 +28,12 @@ public abstract class GameEntity {
     @Column(insertable = false, updatable = false)
     private String dType;
 
-    @JsonIgnore
-    @ManyToOne
-    private World world;
+    @OneToOne(fetch = FetchType.EAGER)//cascade = CascadeType.ALL)
+    @JoinColumn(name="targetEntityInTheWorld")
+    private EntityInTheWorld targetEntityInTheWorld;
 
     public boolean isAlive() {
         return lives != 0;
-    }
-
-    public void die() {
-        lives = 0;
     }
 
     public void decLives(){

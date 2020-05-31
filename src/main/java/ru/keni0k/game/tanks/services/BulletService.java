@@ -33,15 +33,6 @@ public class BulletService implements BaseService<Bullet> {
         return repository.getOne(id);
     }
 
-    public List<EntityInTheWorld> getBulletsByWorldId(Long worldId) {
-        List<Bullet> bullets = repository.getBulletsByWorldId(worldId);
-        List<EntityInTheWorld> entities = new ArrayList<>();
-        for (Bullet bullet : bullets) {
-            entities.add(entityInTheWorldService.getByTargetEntity(bullet));
-        }
-        return entities;
-    }
-
     @Override
     public List<Bullet> findAll() {
         return repository.findAll();
@@ -76,7 +67,7 @@ public class BulletService implements BaseService<Bullet> {
             if (bullets != null) {
                 for (Bullet bullet : bullets) {
                     EntityInTheWorld entity = entityInTheWorldService.getByTargetEntity(bullet);
-                    World world = bullet.getWorld();
+                    World world = entity.getWorld();
                     List<EntityInTheWorld> otherEntities = world.checkBulletCollide(entity);
                     if (world.isEntityOutOfTheField(entity)) {
                         toRemove.add(entity);

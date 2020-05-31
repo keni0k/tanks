@@ -10,9 +10,9 @@
 
     <ul>
         <li th:each="world: ${worlds}">
-            <a href="#" th:onclick="'startGame(' + ${world.getId()} + ')'" th:text="${'ID: ' + world.getId()}"></a>
+            <a href="#" th:onclick="'initGame(' + ${world.getId()} + ')'" th:text="${'ID: ' + world.getId()}"></a>
         </li>
-        <li><a href="#" onclick="startGame(-1)">Создать новый</a></li>
+        <li><a href="#" onclick="initGame(-1)">Создать новый</a></li>
         <li><a href="/api/world/clear_all">Удалить все миры</a></li>
     </ul>
 
@@ -20,6 +20,9 @@
     <noscript>Обновите браузер</noscript>
 
     <script src="https://cdn.rawgit.com/fdaciuk/ajax/v3.0.4/dist/ajax.min.js"></script>
+    <script src="js/sockjs.min.js"></script>
+    <script src="js/stomp.min.js"></script>
+
     <script src="js/request-actions.0.3.js"></script>
     <script src="js/drawing.0.3.js"></script>
     <script src="js/main.0.3.js"></script>

@@ -8,6 +8,7 @@ import ru.keni0k.game.tanks.models.*;
 import ru.keni0k.game.tanks.repositories.BulletRepository;
 import ru.keni0k.game.tanks.repositories.TankRepository;
 import ru.keni0k.game.tanks.utils.KeyAction;
+import ru.keni0k.game.tanks.utils.MapItem;
 
 import java.util.List;
 
@@ -56,11 +57,9 @@ public class TankService implements BaseService<Tank> {
     private void addBullet(World world, KeyAction keyAction) {
         long tankId = keyAction.getTankId();
         EntityInTheWorld tankEntity = entityInTheWorldService.getByTargetEntity(getById(tankId)); //TODO getByTargetEntityId
-        Bullet bullet = new Bullet(world, 1, 1, tankId);
-        bullet = bulletRepository.saveAndFlush(bullet);
         int x = tankEntity.getX();
         int y = tankEntity.getY();
-        switch (tankEntity.getDuration()) {
+        switch (tankEntity.getDirection()) {
             case UP:
                 y -= 2;
                 break;
@@ -74,9 +73,13 @@ public class TankService implements BaseService<Tank> {
                 x += 2;
                 break;
         }
-        EntityInTheWorld entityInTheWorld = new EntityInTheWorld(bullet, x, y, tankEntity.getDuration(), world);
+        EntityInTheWorld entityInTheWorld = new EntityInTheWorld(x, y, tankEntity.getDirection(), world);
         entityInTheWorld = entityInTheWorldService.add(entityInTheWorld);
         world.addGameEntity(entityInTheWorld);
+        Bullet bullet = new Bullet(entityInTheWorld, 1, 1, tankId);
+        bullet = bulletRepository.saveAndFlush(bullet);
+        entityInTheWorld.setTargetEntity(bullet);
+        entityInTheWorldService.update(entityInTheWorld);
         worldService.update(world);
     }
 
@@ -90,11 +93,10 @@ public class TankService implements BaseService<Tank> {
         if (!mayChangeCoords) {
             entityInTheWorld.setCoordsReverseDuration(dur);
         }
-        update(tank);
         entityInTheWorldService.update(entityInTheWorld);
     }
 
-    public ResponseEntity<?> keyPressed(KeyAction keyAction) {
+    public MapItem[][] keyPressed(KeyAction keyAction) {
         String bullets = "eу";
         String tank = "wasdцфыв";
         World world = worldService.getById(keyAction.getWorldId());
@@ -102,10 +104,8 @@ public class TankService implements BaseService<Tank> {
             addBullet(world, keyAction);
         else if (tank.indexOf(keyAction.getKey()) != -1) {
             moveTank(world, keyAction);
-        } else {
-            return new ResponseEntity<>(keyAction, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(keyAction, HttpStatus.OK);
+        return worldService.getWorldMap(keyAction.getWorldId());
     }
 
     @Override
