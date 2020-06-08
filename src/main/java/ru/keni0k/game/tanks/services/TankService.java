@@ -1,14 +1,11 @@
 package ru.keni0k.game.tanks.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.keni0k.game.tanks.models.*;
 import ru.keni0k.game.tanks.repositories.BulletRepository;
 import ru.keni0k.game.tanks.repositories.TankRepository;
 import ru.keni0k.game.tanks.utils.KeyAction;
-import ru.keni0k.game.tanks.utils.MapItem;
 
 import java.util.List;
 
@@ -56,21 +53,21 @@ public class TankService implements BaseService<Tank> {
 
     private void addBullet(World world, KeyAction keyAction) {
         long tankId = keyAction.getTankId();
-        EntityInTheWorld tankEntity = entityInTheWorldService.getByTargetEntity(getById(tankId)); //TODO getByTargetEntityId
+        EntityInTheWorld tankEntity = entityInTheWorldService.getByTargetEntityId(tankId);
         int x = tankEntity.getX();
         int y = tankEntity.getY();
         switch (tankEntity.getDirection()) {
             case UP:
-                y -= 2;
+                y -= 1;
                 break;
             case DOWN:
-                y += 2;
+                y += 1;
                 break;
             case LEFT:
-                x -= 2;
+                x -= 1;
                 break;
             case RIGHT:
-                x += 2;
+                x += 1;
                 break;
         }
         EntityInTheWorld entityInTheWorld = new EntityInTheWorld(x, y, tankEntity.getDirection(), world);
@@ -96,7 +93,7 @@ public class TankService implements BaseService<Tank> {
         entityInTheWorldService.update(entityInTheWorld);
     }
 
-    public MapItem[][] keyPressed(KeyAction keyAction) {
+    public void keyPressed(KeyAction keyAction) {
         String bullets = "eу";
         String tank = "wasdцфыв";
         World world = worldService.getById(keyAction.getWorldId());
@@ -105,7 +102,6 @@ public class TankService implements BaseService<Tank> {
         else if (tank.indexOf(keyAction.getKey()) != -1) {
             moveTank(world, keyAction);
         }
-        return worldService.getWorldMap(keyAction.getWorldId());
     }
 
     @Override

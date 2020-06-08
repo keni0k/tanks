@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 
 import static ru.keni0k.game.tanks.models.EntityInTheWorld.Direction.*;
 
@@ -18,13 +17,13 @@ public class EntityInTheWorld {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private GameEntity targetEntity;
 
     private int x, y;
 
     @JsonIgnore
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     private World world;
 
     public enum Direction {RIGHT, LEFT, UP, DOWN, NONE}
@@ -55,8 +54,8 @@ public class EntityInTheWorld {
         }
     }
 
-    public void setCoordsReverseDuration(int duration) {
-        switch (duration) {
+    public void setCoordsReverseDuration(int direction) {
+        switch (direction) {
             case 1:
                 setY(getY() + 1);
                 break;

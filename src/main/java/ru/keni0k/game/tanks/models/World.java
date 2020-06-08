@@ -5,7 +5,6 @@ import org.hibernate.annotations.Proxy;
 import ru.keni0k.game.tanks.utils.MapItem;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class World {
         entityList = new ArrayList<>();
     }
 
-    @OneToMany(fetch = FetchType.EAGER)//cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EntityInTheWorld> entityList;
 
     public static MapItem[][] getInitialWorld26x26(long tankId, int tankDuration) {

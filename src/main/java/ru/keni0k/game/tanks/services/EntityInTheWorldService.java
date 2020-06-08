@@ -27,6 +27,10 @@ public class EntityInTheWorldService implements BaseService<EntityInTheWorld> {
         return repository.getByTargetEntity(entity);
     }
 
+    public EntityInTheWorld getByTargetEntityId(Long id){
+        return repository.getByTargetEntityId(id);
+    }
+
     @Override
     public List<EntityInTheWorld> findAll() {
         return repository.findAll();

@@ -9,6 +9,8 @@ import javax.persistence.*;
 @Setter
 @Entity
 @DiscriminatorColumn(name = "dType", discriminatorType = DiscriminatorType.STRING)
+@Table(indexes = {
+        @Index(columnList = "dType", name = "d_type_hidx")})
 public abstract class GameEntity {
 
     public GameEntity(EntityInTheWorld entityInTheWorld) {
@@ -28,7 +30,7 @@ public abstract class GameEntity {
     @Column(insertable = false, updatable = false)
     private String dType;
 
-    @OneToOne(fetch = FetchType.EAGER)//cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name="targetEntityInTheWorld")
     private EntityInTheWorld targetEntityInTheWorld;
 

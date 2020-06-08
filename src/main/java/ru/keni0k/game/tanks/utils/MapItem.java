@@ -9,16 +9,16 @@ import ru.keni0k.game.tanks.models.EntityInTheWorld;
 public class MapItem {
 
     private long e;
-    private int d;
+    private Integer d;
 
     public MapItem(long entity) {
         this.e = entity;
-        this.d = EntityInTheWorld.getDirection(EntityInTheWorld.Direction.NONE);
+        this.d = null;
     }
 
-    public MapItem(long entity, int duration) {
+    public MapItem(long entity, int direction) {
         this.e = entity;
-        this.d = duration;
+        this.d = direction;
     }
 
 }
