@@ -2,7 +2,10 @@ package ru.keni0k.game.tanks.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.keni0k.game.tanks.models.*;
+import ru.keni0k.game.tanks.models.Brick;
+import ru.keni0k.game.tanks.models.EntityInTheWorld;
+import ru.keni0k.game.tanks.models.Tank;
+import ru.keni0k.game.tanks.models.World;
 import ru.keni0k.game.tanks.repositories.BulletRepository;
 import ru.keni0k.game.tanks.repositories.TankRepository;
 import ru.keni0k.game.tanks.repositories.WorldRepository;
@@ -87,9 +90,9 @@ public class WorldService implements BaseService<World> {
         return new MapAndIds(worldInitialState, world.getId(), tank.getId());
     }
 
-    public MapAndIds addNewTank(Long worldId){
+    public MapAndIds addNewTank(Long worldId) {
         World world = getById(worldId);
-        EntityInTheWorld entityInTheWorld = new EntityInTheWorld( 0, 0, EntityInTheWorld.Direction.RIGHT, world);
+        EntityInTheWorld entityInTheWorld = new EntityInTheWorld(0, 0, EntityInTheWorld.Direction.RIGHT, world);
         entityInTheWorld = entityInTheWorldService.add(entityInTheWorld);
         world.addGameEntity(entityInTheWorld);
         update(world);
@@ -100,7 +103,7 @@ public class WorldService implements BaseService<World> {
         return new MapAndIds(world.getMap(), worldId, tank.getId());
     }
 
-    public MapItem[][] getWorldMap(Long worldId){
+    public MapItem[][] getWorldMap(Long worldId) {
         World world = getById(worldId);
         if (world != null)
             return world.getMap();

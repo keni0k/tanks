@@ -2,7 +2,10 @@ package ru.keni0k.game.tanks.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.keni0k.game.tanks.models.*;
+import ru.keni0k.game.tanks.models.Bullet;
+import ru.keni0k.game.tanks.models.EntityInTheWorld;
+import ru.keni0k.game.tanks.models.Tank;
+import ru.keni0k.game.tanks.models.World;
 import ru.keni0k.game.tanks.repositories.BulletRepository;
 import ru.keni0k.game.tanks.repositories.TankRepository;
 import ru.keni0k.game.tanks.utils.KeyAction;

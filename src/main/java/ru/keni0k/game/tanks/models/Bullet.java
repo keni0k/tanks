@@ -21,6 +21,7 @@ public class Bullet extends MovableGameEntity {
         this.setLives(1);
     }
 
-    public Bullet() { }
+    public Bullet() {
+    }
 
 }

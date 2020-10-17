@@ -14,7 +14,7 @@ public class EntityInTheWorldService implements BaseService<EntityInTheWorld> {
     private EntityInTheWorldRepository repository;
 
     @Autowired
-    public EntityInTheWorldService(EntityInTheWorldRepository entityInTheWorldRepository){
+    public EntityInTheWorldService(EntityInTheWorldRepository entityInTheWorldRepository) {
         repository = entityInTheWorldRepository;
     }
 
@@ -23,11 +23,11 @@ public class EntityInTheWorldService implements BaseService<EntityInTheWorld> {
         return repository.getOne(id);
     }
 
-    public EntityInTheWorld getByTargetEntity(GameEntity entity){
+    public EntityInTheWorld getByTargetEntity(GameEntity entity) {
         return repository.getByTargetEntity(entity);
     }
 
-    public EntityInTheWorld getByTargetEntityId(Long id){
+    public EntityInTheWorld getByTargetEntityId(Long id) {
         return repository.getByTargetEntityId(id);
     }
 

@@ -15,7 +15,8 @@ public class Brick extends GameEntity {
         setLives(lives);
     }
 
-    public Brick() { }
+    public Brick() {
+    }
 
     public boolean isHard() {
         return getLives() == -1;

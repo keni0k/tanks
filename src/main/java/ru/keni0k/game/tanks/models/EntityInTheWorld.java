@@ -17,13 +17,13 @@ public class EntityInTheWorld {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private GameEntity targetEntity;
 
     private int x, y;
 
     @JsonIgnore
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private World world;
 
     public enum Direction {RIGHT, LEFT, UP, DOWN, NONE}
@@ -142,5 +142,6 @@ public class EntityInTheWorld {
         this.direction = direction;
     }
 
-    public EntityInTheWorld() { }
+    public EntityInTheWorld() {
+    }
 }

@@ -59,7 +59,6 @@ public class BulletService implements BaseService<Bullet> {
     @Scheduled(fixedRate = 75)
     @Transactional
     public void reportCurrentTime() {
-        long startSchedule = System.currentTimeMillis();
         List<Bullet> bullets = findAll();
         if (bullets != null) {
             for (Bullet bullet : bullets) {
@@ -97,8 +96,6 @@ public class BulletService implements BaseService<Bullet> {
                 }
                 worldService.update(world);
             }
-
         }
-        System.out.println("Time: " + (System.currentTimeMillis() - startSchedule));
     }
 }

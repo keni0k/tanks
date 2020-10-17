@@ -34,7 +34,7 @@ function initGame(worldId) {
     if (stompClient !== null) {
         stompClient.disconnect();
     }
-    stompClient = Stomp.client('ws://localhost:5000/gs-guide-websocket');//over(ws);
+    stompClient = Stomp.client('ws://localhost:5000/gs-guide-websocket');
     stompClient.debug = function(str) {};
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);

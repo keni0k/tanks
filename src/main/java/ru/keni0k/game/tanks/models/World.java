@@ -65,16 +65,16 @@ public class World {
                 {0, 0, 0, 0, 0, 0, 0, 0, tankId + 3, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
-        MapItem[][] mapp = new MapItem[26][26];
+        MapItem[][] initialWorldMap = new MapItem[26][26];
         for (int i = 0; i < 26; i++) {
             for (int j = 0; j < 26; j++) {
                 if (map[i][j] < 5)
-                    mapp[i][j] = new MapItem(map[i][j]);
+                    initialWorldMap[i][j] = new MapItem(map[i][j]);
                 else
-                    mapp[i][j] = new MapItem(map[i][j], tankDuration);
+                    initialWorldMap[i][j] = new MapItem(map[i][j], tankDuration);
             }
         }
-        return mapp;
+        return initialWorldMap;
     }
 
     public MapItem[][] getMap() {

@@ -15,18 +15,18 @@ public class MainController {
     private WorldService worldService;
 
     @Autowired
-    public MainController(WorldService tankService){
-        worldService = tankService;
+    public MainController(WorldService worldService) {
+        this.worldService = worldService;
     }
 
     @RequestMapping("/")
-    public String getUI(ModelMap modelMap){
+    public String getUI(ModelMap modelMap) {
         modelMap.addAttribute("worlds", worldService.findAll());
         return "index";
     }
 
     @GetMapping(PATH.CLEAR_ALL)
-    public RedirectView clearAll(){
+    public RedirectView clearAll() {
         worldService.deleteAll();
         return new RedirectView("/");
     }

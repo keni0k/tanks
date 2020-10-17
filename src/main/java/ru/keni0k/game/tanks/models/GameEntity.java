@@ -31,14 +31,14 @@ public abstract class GameEntity {
     private String dType;
 
     @OneToOne
-    @JoinColumn(name="targetEntityInTheWorld")
+    @JoinColumn(name = "targetEntityInTheWorld")
     private EntityInTheWorld targetEntityInTheWorld;
 
     public boolean isAlive() {
         return lives != 0;
     }
 
-    public void decLives(){
+    public void decLives() {
         lives -= 1;
     }
 

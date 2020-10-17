@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.keni0k.game.tanks.services.WorldService;
 import ru.keni0k.game.tanks.utils.MapAndIds;
 import ru.keni0k.game.tanks.utils.MapItem;
@@ -17,13 +17,13 @@ public class WorldController {
     private WorldService service;
 
     @Autowired
-    public WorldController(WorldService tankService){
+    public WorldController(WorldService tankService) {
         service = tankService;
     }
 
     @MessageMapping("/world/init")
     @SendTo("/topic/init")
-    public MapAndIds getInitialWorld(Long worldId){
+    public MapAndIds getInitialWorld(Long worldId) {
         if (worldId == -1) {
             return service.initWorld();
         } else {
@@ -33,7 +33,7 @@ public class WorldController {
 
     @MessageMapping("/world/map")
     @SendTo("/topic/map")
-    public MapItem[][] getWorldMap(Long worldId){
+    public MapItem[][] getWorldMap(Long worldId) {
         return service.getWorldMap(worldId);
     }
 

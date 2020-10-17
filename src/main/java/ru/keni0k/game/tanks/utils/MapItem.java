@@ -2,7 +2,6 @@ package ru.keni0k.game.tanks.utils;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.keni0k.game.tanks.models.EntityInTheWorld;
 
 @Getter
 @Setter
